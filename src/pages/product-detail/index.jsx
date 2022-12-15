@@ -1,14 +1,46 @@
-import React from "react";
+import React, { useEffect } from "react";
+import axios from "axios";
 import Navbar from "../../components/navbar";
+import { useState } from "react";
+import { useFetcher, useLocation } from "react-router-dom";
 
 const ProductDetail = () => {
+    const { state } = useLocation()
+    const [data, setData] = useState()
+    const [thumbnail, setThumbnail] = useState()
+
+
+
+    console.log('Stata', state.id);
+
+    const fetchAPIAxios = () => {
+        axios.get(`https://lapcenter-v1.onrender.com/api/product/getProductById/${state.id}`)
+            .then(function (response) {
+                // handle success
+                console.log('response', response.data.response)
+                setData(response.data.response)
+                setThumbnail(response.data.response.images[0])
+
+            })
+            .catch(function (error) {
+                // handle error
+                console.log(error);
+            })
+    }
+
+
+    useEffect(() => {
+        fetchAPIAxios()
+    }, [])
+
+
     return (
 
         <div>
             <Navbar />
             <div className="px-10 py-5">
 
-                <p className="text-2xl font-semibold">Tên Sản Phẩm</p>
+                <p className="text-2xl font-semibold">{data?.name}</p>
                 <div className="flex">
                     <div className="flex">
                         <p>Tình trạng:</p>
@@ -24,16 +56,24 @@ const ProductDetail = () => {
                 <div className="flex justify-between">
                     <div className="w-[33%] px-10">
                         <img className="w-full h-auto"
-                            src="https://fptshop.com.vn/Uploads/images/2015/0511/Lenovo-IdeaPad-Gaming-3-fpt-1.jpg" alt="" />
+                            src={thumbnail} alt="" />
                         <div className="flex justify-center">
-                            <img className="w-10 h-10 border-gray-600 border-[1px] mt-2 mx-2 cursor-pointer " src="https://fptshop.com.vn/Uploads/images/2015/0511/Lenovo-IdeaPad-Gaming-3-fpt-1.jpg" alt="" />
-                            <img className="w-10 h-10 border-gray-600 border-[1px] mt-2 mx-2 cursor-pointer" src="https://fptshop.com.vn/Uploads/images/2015/0511/Lenovo-IdeaPad-Gaming-3-fpt-1.jpg" alt="" />
-                            <img className="w-10 h-10 border-gray-600 border-[1px] mt-2 mx-2 cursor-pointer " src="https://fptshop.com.vn/Uploads/images/2015/0511/Lenovo-IdeaPad-Gaming-3-fpt-1.jpg" alt="" />
+                            {data?.images?.map((img, index) => (
+                                <img
+                                    key={index}
+                                    className="w-10 h-10 border-gray-600 border-[1px] mt-2 mx-2 cursor-pointer "
+                                    src={img}
+                                    alt=""
+                                    onClick={() => setThumbnail(img)}
+                                />
+
+                            ))}
+
                         </div>
                     </div>
 
                     <div className="w-[33%] px-3">
-                        <span>Giá bán: </span> <span>10000000 VND</span>
+                        <span>Giá bán: </span> <span>{data?.price}</span>
                         <div>
                             <div className="bg-green-500 p-5 ">
                                 <p className="text-lg font-semibold text-slate-100"> Khuyến mãi - Quà tặng</p>
@@ -76,42 +116,42 @@ const ProductDetail = () => {
                 </div>
                 <hr className="my-5" />
                 <div className="px-20">
-                <table class="table-fixed w-full mb-10 ">
-                    <thead>
-                        <tr className="text-left border-b-[1px] border-black">
-                            <th className="w-[30%]">Phần cứng</th>
-                            <th className="w-[70%]">Thông số kỹ thuật</th>
+                    <table class="table-fixed w-full mb-10 ">
+                        <thead>
+                            <tr className="text-left border-b-[1px] border-black">
+                                <th className="w-[30%]">Phần cứng</th>
+                                <th className="w-[70%]">Thông số kỹ thuật</th>
 
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr className="border-b-[1px] border-gray-300  ">
-                            <td className="py-2">Model</td>
-                            <td className="py-2">Lenovo Ideapad Gaming 3 15ARH05</td>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr className="border-b-[1px] border-gray-300  ">
+                                <td className="py-2">Model</td>
+                                <td className="py-2">{data?.model}</td>
 
-                        </tr>
-                        <tr className="border-b-[1px] border-gray-300">
-                            <td className="py-2">RAM</td>
-                            <td className="py-2">8 GB DDR4 3200MHz</td>
+                            </tr>
+                            <tr className="border-b-[1px] border-gray-300">
+                                <td className="py-2">RAM</td>
+                                <td className="py-2">{data?.ram}</td>
 
-                        </tr>
-                        <tr className="border-b-[1px] border-gray-300">
-                            <td className="py-2">Ổ cứng</td>
-                            <td className="py-2">256GB SSD PCIe 3.0x4</td>
+                            </tr>
+                            <tr className="border-b-[1px] border-gray-300">
+                                <td className="py-2">Ổ cứng</td>
+                                <td className="py-2">{data?.disk}</td>
 
-                        </tr>
-                        <tr className="border-b-[1px] border-gray-300">
-                            <td className="py-2">Card đồ hoạ</td>
-                            <td className="py-2">NVIDIA GeForce GTX 1650 4GB GDDR6</td>
+                            </tr>
+                            <tr className="border-b-[1px] border-gray-300">
+                                <td className="py-2">Card đồ hoạ</td>
+                                <td className="py-2">{data?.card}</td>
 
-                        </tr>
-                        <tr className="border-b-[1px] border-gray-300">
-                            <td className="py-2">Màn hình</td>
-                            <td className="py-2">15.6inch FHD</td>
+                            </tr>
+                            <tr className="border-b-[1px] border-gray-300">
+                                <td className="py-2">Màn hình</td>
+                                <td className="py-2">{data?.monitor}</td>
 
-                        </tr>
-                    </tbody>
-                </table>
+                            </tr>
+                        </tbody>
+                    </table>
 
                 </div>
 
