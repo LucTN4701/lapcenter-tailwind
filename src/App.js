@@ -6,8 +6,15 @@ import Contact from './pages/contact'
 import ProductDetail from './pages/product-detail'
 import Login from './pages/login'
 import RegisterAccount from './pages/register_account'
+import PageNotFound from './pages/page-not-found'
+import Buy from './pages/buy'
+import MyCart from './pages/mycart'
+import History from './pages/history'
+import Orders from './pages/orders'
 
 function App() {
+  const name = localStorage.getItem('name')
+  const isAdmin = localStorage.getItem('isAdmin')
   return (
     <BrowserRouter>
       <Routes>
@@ -15,11 +22,33 @@ function App() {
         <Route path="/intro" element={<Intro />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/product/:id" element={<ProductDetail />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/registeraccount" element={<RegisterAccount />} />
+        <Route path="/buy" element={<Buy />} />
+
+        {isAdmin==='true' && <Route path="/orders" element={<Orders />} />}
+
+        {localStorage.getItem('name') && (
+          <Route path="/mycart" element={<MyCart />} />
+        )
+
+        }
+
+        {localStorage.getItem('name') && (
+          <Route path="/history" element={<History />} />
+        )
+        }
+
+        <Route path="/*" element={<PageNotFound />} />
 
 
 
+        {
+          (!name &&
+            <>
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<RegisterAccount />} />
+            </>
+          )
+        }
       </Routes>
     </BrowserRouter>
   )

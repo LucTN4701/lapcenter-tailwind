@@ -1,0 +1,10 @@
+.hide_input::-webkit-outer-spin-button,
+.hide_input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+.hide_input[type=number] {
+  -moz-appearance: textfield;
+}

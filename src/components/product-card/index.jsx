@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const ProductCart = ({ item }) => {
-    
+
     const navigate = useNavigate()
     return (
 
@@ -18,8 +18,12 @@ const ProductCart = ({ item }) => {
                 </p>
                 <p className="flex">Chip: <p className="font-medium text-[16px] ml-1 truncate" >{item.cpu}</p> </p>
                 <p className="flex">Giá: <p className="font-medium text-[16px] text-red-600 ml-1" >{item.price} VND</p></p>
-                <div onClick={() => navigate(`/product/${item?._id}`, { state: { id: item._id } })} className="w-[160px] py-2 bg-green-500 rounded-xl my-2 m-auto hover:bg-green-700">
-                    <p className="text-center font-medium text-lime-100 cursor-pointer">Xem san pham</p></div>
+                <div onClick={() => navigate(`/product/${item?._id}`, {
+                    state: { id: item._id, brand: item.brand }
+
+                })} className="w-[160px] py-2 bg-orange-500 rounded-xl my-2 m-auto hover:bg-green-500">
+                    <p className="text-center font-medium text-lime-100 cursor-pointer">Xem sản phẩm</p>
+                </div>
             </div>
 
 
